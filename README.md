@@ -1,7 +1,7 @@
 # GitHubOrgStats
 
 This is a simply and not fully tested script to extract some stats for a github organization, such
-as number of starts, watchers, forks, etc.
+as number of stars, watchers, forks, etc.
 It will store the results in a .csv file, which can be imported in spread sheets for visualisation.
 
 The script has not been fully tested and comes without any warranties. Use at your own risk.
