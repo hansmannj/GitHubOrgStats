@@ -81,16 +81,16 @@ class OrgStats:
         for repo in page:
             self.processed += 1
             if self.args.skip_private and repo["private"]:
-                print(f"Skipping private repo: {repo['name']}", end="\r")
+                print(f"Skipping private repo: {repo['name']}", " " * 30, end="\r")
                 self.skipped_private += 1
                 continue
 
             if self.args.skip_archived and repo["archived"]:
-                print(f"Skipping archived repo: {repo['name']}", end="\r")
+                print(f"Skipping archived repo: {repo['name']}", " " * 30, end="\r")
                 self.skipped_archived += 1
                 continue
 
-            print(f"Processing repository: {repo['name']}", end="\r")
+            print(f"Processing repository: {repo['name']}", " " * 30, end="\r")
             repo_data = {}
             for param in self.direct_params:
                 repo_data[param] = repo[param]
