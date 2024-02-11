@@ -39,6 +39,7 @@ class OrgStats:
                 f' repositories of {self.org}. Archived repositories will be ' \
                     f'{"skipped" if self.args.skip_archived else "included"}...'
         )
+
         last_page = False
         page = 1
         while not last_page:
@@ -55,6 +56,11 @@ class OrgStats:
             resp_json = json.loads(response.content)
             self._read_stats_page(resp_json)
             page += 1
+            # As the response might be paginated, repeating this until reaching the last page.
+            # I assume, that the last page should not have a "next" in the link header or no link
+            # header is present at all, probably if the response is not pagineted.
+            # Some docu on pagination in GitHub API:
+            # https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28
             if "link" in response.headers and not "next" in response.headers["link"]:
                 last_page = True
             if not "link" in response.headers:
@@ -122,6 +128,13 @@ class OrgStats:
         '''
 
         try:
+            # the trick here is, that we add the query parameter per_page = 1.
+            # Now we can try to get the count for our indirect parameter from the "last" link
+            # in the link header.
+            # However, there might be cases, where no link header or no last link in the link header
+            # is present.
+            # Guess that might be the case, when we have 0 or 1 elements in the returned list.
+            # The link header is included also in HEAD requests.
             response = requests.head(f"{param_url}?per_page=1", headers=self.headers, timeout=10)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
@@ -133,6 +146,10 @@ class OrgStats:
                 return number
 
         try:
+            # if no link header was present, or no "last" link in the link header, we will do a GET
+            # instead of a HEAD request and check the returned list directly, instead of analyzing
+            # the link header. The number of elements of the returned list should be the value for
+            # the counter of the given indirect parameter.
             response = requests.get(param_url, headers=self.headers, timeout=10)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
