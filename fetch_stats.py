@@ -16,7 +16,6 @@ class OrgStats:
             "Authorization": f"Bearer {self.args.github_token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
-        print("*"*10, self.args)
         self.direct_params = direct_params
         self.indirect_params = indirect_params
         self.skipped_private = 0
