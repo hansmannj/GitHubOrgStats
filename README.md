@@ -17,11 +17,11 @@ make setup
 ```
 
 To configure the parameters, that should be extracted for the repos of your organization, adapt the
-lists `PRIMARY_PARAMS` and `SECONDARY_PARAMS` in `main()`.
+lists `primary_params` and `secondary_params` in `main()`.
 
-- `PRIMARY_PARAMS` in this context are parameters, whose values are directly contained in the JSON
+- `primary_params` in this context are parameters, whose values are directly contained in the JSON
 response of `https://api.github.com/orgs/ORGANIZATION_NAME/repos`.
-- `SECONDARY_PARAMS` are those, for which no value is given in the JSON, but instead a url, which
+- `secondary_params` are those, for which no value is given in the JSON, but instead a url, which
 can be queried, e.g. `subscribers_url`. The length of the list returned when querying this URL will
 represent the count of `subscribers` in this case.
 

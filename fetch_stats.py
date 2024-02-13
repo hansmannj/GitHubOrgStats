@@ -1,7 +1,8 @@
 import argparse
 import csv
 import json
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs
+from urllib.parse import urlparse
 
 import requests
 
@@ -16,10 +17,15 @@ class OrgStats:
             "Authorization": f"Bearer {self.args.github_token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
-        self.primary_params = primary_params
-        self.secondary_params = secondary_params
-        self.skipped_private = 0
-        self.skipped_archived = 0
+
+        self.params = {}
+        self.params["primary"] = primary_params
+        self.params["secondary"] = secondary_params
+
+        self.skipped = {}
+        self.skipped["private"] = 0
+        self.skipped["archived"] = 0
+
         self.processed = 0
         self.repo_list = []
 
@@ -66,7 +72,7 @@ class OrgStats:
                 last_page = True
 
         print(f"Processed {self.processed} repos in total. " \
-              f"Skipped {self.skipped_private} private and {self.skipped_archived } " \
+              f"Skipped {self.skipped['private']} private and {self.skipped['archived'] } " \
               "archived repos.")
 
     def _read_stats_page(self, page):
@@ -82,20 +88,20 @@ class OrgStats:
             self.processed += 1
             if self.args.skip_private and repo["private"]:
                 print(f"Skipping private repo: {repo['name']}", " " * 30, end="\r")
-                self.skipped_private += 1
+                self.skipped["private"] += 1
                 continue
 
             if self.args.skip_archived and repo["archived"]:
                 print(f"Skipping archived repo: {repo['name']}", " " * 30, end="\r")
-                self.skipped_archived += 1
+                self.skipped["archived"] += 1
                 continue
 
             print(f"Processing repository: {repo['name']}", " " * 30, end="\r")
             repo_data = {}
-            for param in self.primary_params:
+            for param in self.params["primary"]:
                 repo_data[param] = repo[param]
 
-            for param in self.secondary_params:
+            for param in self.params["secondary"]:
                 repo_data[param] = self._get_secondary_param_count(repo[f"{param}_url"])
 
             self.repo_list.append(repo_data)
@@ -103,7 +109,7 @@ class OrgStats:
     def write_csv(self):
         '''Writes self.repo_list a .csv file."
         '''
-        with open(f"{self.org}_stats.csv", 'w', newline='') as stats_file:
+        with open(f"{self.org}_stats.csv", 'w', newline='', encoding="utf-8") as stats_file:
             writer = csv.DictWriter(stats_file, self.repo_list[0].keys())
             writer.writeheader()
             writer.writerows(self.repo_list)
@@ -196,8 +202,8 @@ def get_args():
     parser.add_argument("-p", "--skip_private", help="if set, private repos of the organization" \
         "will be skipped. Default: False, i.e. private repos will be included.",
         action="store_true", default=False)
-    parser.add_argument("-a", "--skip_archived", help="if set, archived repos of the organization " \
-        "will be skipped. Default: False, i.,e. archived repos will be included." \
+    parser.add_argument("-a", "--skip_archived", help="if set, archived repos of the organization" \
+        " will be skipped. Default: False, i.,e. archived repos will be included." \
             "repos.", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -206,13 +212,13 @@ def get_args():
 
 def main():
     args = get_args()
-    PRIMARY_PARAMS = [
+    primary_params = [
         "id", "name", "full_name", "private", "archived", "stargazers_count", "forks_count"
     ]
-    SECONDARY_PARAMS = ["subscribers"]  # those, that appear with a "_url" suffix in the JSON of
+    secondary_params = ["subscribers"]  # those, that appear with a "_url" suffix in the JSON of
     # https://api.github.com/users/ORGANIZATION_NAME/repos
 
-    org_stats = OrgStats(args, PRIMARY_PARAMS, SECONDARY_PARAMS)
+    org_stats = OrgStats(args, primary_params, secondary_params)
     org_stats.read_stats()
     org_stats.write_csv()
 
