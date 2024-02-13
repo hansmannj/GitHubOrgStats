@@ -8,7 +8,7 @@ import requests
 
 class OrgStats:
 
-    def __init__(self, args, direct_params, indirect_params):
+    def __init__(self, args, primary_params, secondary_params):
         self.args = args
         self.org = self.args.organization
         self.headers = {
@@ -16,8 +16,8 @@ class OrgStats:
             "Authorization": f"Bearer {self.args.github_token}",
             "X-GitHub-Api-Version": "2022-11-28"
         }
-        self.direct_params = direct_params
-        self.indirect_params = indirect_params
+        self.primary_params = primary_params
+        self.secondary_params = secondary_params
         self.skipped_private = 0
         self.skipped_archived = 0
         self.processed = 0
@@ -92,10 +92,10 @@ class OrgStats:
 
             print(f"Processing repository: {repo['name']}", " " * 30, end="\r")
             repo_data = {}
-            for param in self.direct_params:
+            for param in self.primary_params:
                 repo_data[param] = repo[param]
 
-            for param in self.indirect_params:
+            for param in self.secondary_params:
                 repo_data[param] = self._get_indirect_param_count(repo[f"{param}_url"])
 
             self.repo_list.append(repo_data)
@@ -206,13 +206,13 @@ def get_args():
 
 def main():
     args = get_args()
-    DIRECT_PARAMS = [
+    PRIMARY_PARAMS = [
         "id", "name", "full_name", "private", "archived", "stargazers_count", "forks_count"
     ]
-    INDIRECT_PARAMS = ["subscribers"]  # those, that appear with a "_url" suffix in the JSON of
+    SECONDARY_PARAMS = ["subscribers"]  # those, that appear with a "_url" suffix in the JSON of
     # https://api.github.com/users/ORGANIZATION_NAME/repos
 
-    org_stats = OrgStats(args, DIRECT_PARAMS, INDIRECT_PARAMS)
+    org_stats = OrgStats(args, PRIMARY_PARAMS, SECONDARY_PARAMS)
     org_stats.read_stats()
     org_stats.write_csv()
 

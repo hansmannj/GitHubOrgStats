@@ -1,7 +1,8 @@
 # GitHubOrgStats
 
-This is a simple and not fully tested script to extract some stats for a github organization, such
-as number of stars, watchers, forks, etc.
+This is a simple and not fully tested script to extract some statistics for all repositories
+belonging to a github organization, such as number of stars, watchers, forks, etc.
+(Private or archived repositories can optionally be skipped).
 It will store the results in a .csv file, which can be imported in spread sheets for visualisation.
 :warning: The script has not been fully tested and comes without any warranties. Use at your own
 risk.
@@ -16,11 +17,11 @@ make setup
 ```
 
 To configure the parameters, that should be extracted for the repos of your organization, adapt the
-lists `DIRECT_PARAMS` and `INDIRECT_PARAMS` in `main()`.
+lists `PRIMARY_PARAMS` and `SECONDARY_PARAMS` in `main()`.
 
-- `DIRECT_PARAMS` in this context are parameters, whose values are directly contained in the JSON
+- `PRIMARY_PARAMS` in this context are parameters, whose values are directly contained in the JSON
 response of `https://api.github.com/orgs/ORGANIZATION_NAME/repos`.
-- `INDIRECT_PARAMETERS` are those, for which no value is given in the JSON, but instead a url, which
+- `SECONDARY_PARAMS` are those, for which no value is given in the JSON, but instead a url, which
 can be queried, e.g. `subscribers_url`. The length of the list returned when querying this URL will
 represent the count of `subscribers` in this case.
 
