@@ -57,7 +57,7 @@ class OrgStats:
             page += 1
             # As the response might be paginated, repeating this until reaching the last page.
             # I assume, that the last page should not have a "next" in the link header or no link
-            # header is present at all, probably if the response is not pagineted.
+            # header is present at all, probably if the response is not paginated.
             # Some docu on pagination in GitHub API:
             # https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28
             if "link" in response.headers and not "next" in response.headers["link"]:
@@ -96,7 +96,7 @@ class OrgStats:
                 repo_data[param] = repo[param]
 
             for param in self.secondary_params:
-                repo_data[param] = self._get_indirect_param_count(repo[f"{param}_url"])
+                repo_data[param] = self._get_secondary_param_count(repo[f"{param}_url"])
 
             self.repo_list.append(repo_data)
 
@@ -108,7 +108,7 @@ class OrgStats:
             writer.writeheader()
             writer.writerows(self.repo_list)
 
-    def _get_indirect_param_count(self, param_url):
+    def _get_secondary_param_count(self, param_url):
         '''Calculated the count for a parameter, which is not already directly included in the
         response of https://api.github.com/orgs/{self.org}/.
         For those parameters, a url is given, which needs to be requested and the number elements
