@@ -21,8 +21,8 @@ lists `primary_params` and `secondary_params` in `main()`.
 
 - `primary_params` in this context are parameters, whose values are directly contained in the JSON
 response of `https://api.github.com/orgs/ORGANIZATION_NAME/repos`.
-- `secondary_params` are those, for which no value is given in the JSON, but instead a url, which
-can be queried, e.g. `subscribers_url`. The length of the list returned when querying this URL will
+- `secondary_params` are some of those, for which no value is given in the JSON, but instead a url, which
+can be queried. Only tested so far with `subscribers_url`. The length of the list returned when querying this URL will
 represent the count of `subscribers` in this case.
 
 Initially I was not sure, why `stargazers_count` and `watchers_count` had the same numbers, and the
