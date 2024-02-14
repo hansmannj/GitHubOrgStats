@@ -31,7 +31,7 @@ https://docs.github.com/en/rest/activity/starring?apiVersion=2022-11-28#starring
 
 ## Usage
 
-The script must be called with as in the following:
+The script must be called as in the following:
 
 ```bash
 python3 fetch_stats.py YOUR_GITHUB_TOKEN YOUR_ORGANIZATION_NAME
@@ -40,7 +40,7 @@ python3 fetch_stats.py YOUR_GITHUB_TOKEN YOUR_ORGANIZATION_NAME
 There are two optional flags, which can be set:
 
 ```bash
-python3 fetch_stats.py YOUR_GITHUB_TOKEN YOUR_ORGANIZATION_NAME --public_only --non_archived_only
+python3 fetch_stats.py YOUR_GITHUB_TOKEN YOUR_ORGANIZATION_NAME --skip_private --skip_archived
 ```
 
 If `-p` or `--skip_private` is set, private repos of the organization will be skipped. The default
