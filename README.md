@@ -1,9 +1,10 @@
 # GitHubOrgStats
 
 This is a simple and not fully tested script to extract some statistics for all repositories
-belonging to a github organization, such as number of stars, watchers, forks, etc.
+belonging to a github organization (at least for all repositories, you have access to :wink:),
+such as number of stars, watchers, forks, etc.
 (Private or archived repositories can optionally be skipped).
-It will store the results in a .csv file, which can be imported in spread sheets for visualisation.
+It will store the results in a .csv file, which can be imported in spread sheets for visualization.
 :warning: The script has not been fully tested and comes without any warranties. Use at your own
 risk.
 
