@@ -46,7 +46,7 @@ python3 fetch_stats.py YOUR_GITHUB_TOKEN YOUR_ORGANIZATION_NAME --public_only --
 If `-p` or `--skip_private` is set, private repos of the organization will be skipped. The default
 value is `False`, i.e. private repositories will be included by default.
 
-Likewise, if `-n` or `--skip_archived` is set, archived repos of the organization will be skipped.
-The default is `false`, i.e. archived repositories will be included by dedault.
+Likewise, if `-a` or `--skip_archived` is set, archived repos of the organization will be skipped.
+The default is `false`, i.e. archived repositories will be included by default.
 
-The fetched stats will be written to a file `ORGANIZATION_NAME_stats.csv` including a header.
+The fetched stats will be written to a file `YOUR_ORGANIZATION_NAME_stats.csv` including a header.

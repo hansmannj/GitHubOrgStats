@@ -215,7 +215,8 @@ def main():
     primary_params = [
         "id", "name", "full_name", "private", "archived", "stargazers_count", "forks_count"
     ]
-    secondary_params = ["subscribers"]  # those, that appear with a "_url" suffix in the JSON of
+    secondary_params = ["subscribers"]  # some of those (only tested with "subscribers" so far),
+    # that appear with a "_url" suffix in the JSON response of
     # https://api.github.com/users/ORGANIZATION_NAME/repos
 
     org_stats = OrgStats(args, primary_params, secondary_params)
