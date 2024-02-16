@@ -28,7 +28,7 @@ help:
 	@echo
 	@echo "Possible targets:"
 	@echo -e " \033[1mSetup TARGETS\033[0m "
-	@echo "- setup              Create the python virtual environment with developper tools and activate it"
+	@echo "- setup              Create the python virtual environment with developer tools and activate it"
 	@echo -e " \033[1mFORMATING, LINTING AND TESTING TOOLS TARGETS\033[0m "
 	@echo "- format             Format the python source code"
 	@echo "- lint               Lint the python source code"
